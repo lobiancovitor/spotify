@@ -3,6 +3,7 @@ package br.com.ibmec.cloud.spotify.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Data
@@ -21,4 +22,8 @@ public class Banda {
 
     @Column
     private String imagem;
+
+    @OneToMany
+    @JoinColumn(name = "banda_id", referencedColumnName = "musica_id")
+    private ArrayList<Musica> musicas;
 }

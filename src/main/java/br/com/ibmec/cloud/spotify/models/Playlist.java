@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.ManyToAny;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -19,6 +20,9 @@ public class Playlist {
 
     @ManyToOne
     private Usuario usuario;
+
+    @OneToMany
+    private List<Musica> musicas;
 
 
 }
