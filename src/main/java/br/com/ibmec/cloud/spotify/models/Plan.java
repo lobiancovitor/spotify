@@ -8,19 +8,18 @@ import java.util.UUID;
 
 @Data
 @Entity
-public class Usuario {
+public class Plan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column
-    private String nome;
+    private String name;
 
     @Column
-    private String senha;
+    private double price;
 
-    @OneToMany
-    private List<Playlist> playlist;
-
+    @OneToMany(mappedBy = "plan")
+    private List<Subscription> subscriptions;
 }

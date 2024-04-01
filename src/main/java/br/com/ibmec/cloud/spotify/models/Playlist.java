@@ -1,8 +1,8 @@
 package br.com.ibmec.cloud.spotify.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.ManyToAny;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,13 +16,12 @@ public class Playlist {
     private UUID id;
 
     @Column
-    private String nome;
+    private String name;
 
     @ManyToOne
-    private Usuario usuario;
+    @JsonIgnore
+    private User user;
 
     @OneToMany
-    private List<Musica> musicas;
-
-
+    private List<Music> musics;
 }

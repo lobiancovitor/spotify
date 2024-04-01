@@ -7,18 +7,18 @@ import java.util.UUID;
 
 @Data
 @Entity
-public class Assinatura {
+public class Subscription {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne
-    private Plano plano;
+    private Plan plan;
 
     @ManyToOne
-    private Usuario usuario;
+    private User user;
 
     @Column
-    private boolean ativo;
+    private boolean active;
 }
