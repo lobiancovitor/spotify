@@ -19,7 +19,4 @@ public class Plan {
 
     @Column
     private double price;
-
-    @OneToMany(mappedBy = "plan")
-    private List<Subscription> subscriptions;
 }

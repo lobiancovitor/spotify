@@ -37,4 +37,7 @@ public class User {
     @OneToMany
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<Playlist> playlist;
+
+    @OneToMany
+    private List<Subscription> subscriptions;
 }
