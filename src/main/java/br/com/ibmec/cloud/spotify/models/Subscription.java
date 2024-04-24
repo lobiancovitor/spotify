@@ -1,5 +1,6 @@
 package br.com.ibmec.cloud.spotify.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,9 +15,11 @@ public class Subscription {
     private UUID id;
 
     @ManyToOne
+    @JsonIgnore
     private Plan plan;
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 
     @Column

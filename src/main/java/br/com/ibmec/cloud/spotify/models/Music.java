@@ -18,9 +18,6 @@ public class Music {
     private String name;
 
     @Column
-    private String description;
-
-    @Column
     private Integer duration;
 
     @ManyToOne

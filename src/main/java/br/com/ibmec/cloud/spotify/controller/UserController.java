@@ -2,6 +2,7 @@ package br.com.ibmec.cloud.spotify.controller;
 
 import br.com.ibmec.cloud.spotify.controller.request.LoginRequest;
 import br.com.ibmec.cloud.spotify.controller.request.PlaylistRequest;
+import br.com.ibmec.cloud.spotify.models.Band;
 import br.com.ibmec.cloud.spotify.models.Music;
 import br.com.ibmec.cloud.spotify.models.Playlist;
 import br.com.ibmec.cloud.spotify.models.User;

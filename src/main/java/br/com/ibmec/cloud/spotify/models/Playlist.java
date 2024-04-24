@@ -4,12 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Data
 @Entity
 public class Playlist {
+
+    public Playlist() {
+        this.musics = new ArrayList<>();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -22,6 +27,12 @@ public class Playlist {
     @JsonIgnore
     private User user;
 
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name = "playlist_music",
+            joinColumns = @JoinColumn(name = "playlist_id"),
+            inverseJoinColumns = @JoinColumn(name = "music_id")
+    )
     private List<Music> musics;
+
 }

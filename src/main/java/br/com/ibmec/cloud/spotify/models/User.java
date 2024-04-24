@@ -15,6 +15,7 @@ public class User {
 
     public User() {
         this.playlist = new ArrayList<>();
+        this.subscriptions = new ArrayList<>();
     }
 
     @Id
@@ -37,4 +38,8 @@ public class User {
     @OneToMany
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<Playlist> playlist;
+
+    @OneToMany
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private List<Subscription> subscriptions;
 }

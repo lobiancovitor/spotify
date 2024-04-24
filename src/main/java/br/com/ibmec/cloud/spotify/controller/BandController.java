@@ -4,8 +4,6 @@ import br.com.ibmec.cloud.spotify.controller.request.BandRequest;
 import br.com.ibmec.cloud.spotify.controller.request.MusicRequest;
 import br.com.ibmec.cloud.spotify.models.Band;
 import br.com.ibmec.cloud.spotify.models.Music;
-import br.com.ibmec.cloud.spotify.models.Playlist;
-import br.com.ibmec.cloud.spotify.models.User;
 import br.com.ibmec.cloud.spotify.repository.BandRepository;
 import br.com.ibmec.cloud.spotify.repository.MusicRepository;
 import jakarta.validation.Valid;
@@ -39,7 +37,6 @@ public class BandController {
             Music music = new Music();
             music.setId(UUID.randomUUID());
             music.setName(item.getName());
-            music.setDescription(item.getDescription());
             music.setDuration(item.getDuration());
             music.setBand(band);
 
@@ -51,9 +48,18 @@ public class BandController {
         return new ResponseEntity<>(band, HttpStatus.CREATED);
     }
 
+    @GetMapping
+    public ResponseEntity<List<Band>> getAll() {
+        List<Band> bands = this.bandRepository.findAll();
+        if (bands.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(bands, HttpStatus.OK);
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<Band> get(@PathVariable("id") UUID id) {
-        return  this.bandRepository.findById(id).map(item -> {
+        return this.bandRepository.findById(id).map(item -> {
             return new ResponseEntity<>(item, HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
@@ -70,7 +76,6 @@ public class BandController {
 
         Music music = new Music();
         music.setName(request.getName());
-        music.setDescription(request.getDescription());
         music.setDuration(request.getDuration());
         music.setBand(band);
         band.getMusics().add(music);

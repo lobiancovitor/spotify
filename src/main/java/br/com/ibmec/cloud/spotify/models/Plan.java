@@ -20,6 +20,7 @@ public class Plan {
     @Column
     private double price;
 
-    @OneToMany(mappedBy = "plan")
+    @OneToMany
+    @JoinColumn(name = "plan_id", referencedColumnName = "id")
     private List<Subscription> subscriptions;
 }
