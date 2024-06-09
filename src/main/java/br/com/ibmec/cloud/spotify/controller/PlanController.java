@@ -11,9 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/plan")
+@RequestMapping("/plans")
 public class PlanController {
 
     @Autowired
@@ -28,6 +30,13 @@ public class PlanController {
         this.planRepository.save(plan);
 
         return new ResponseEntity<>(plan, HttpStatus.CREATED);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Plan> getPlan(@PathVariable UUID id) {
+        return this.planRepository.findById(id).map(item -> {
+            return new ResponseEntity<>(item, HttpStatus.OK);
+        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping

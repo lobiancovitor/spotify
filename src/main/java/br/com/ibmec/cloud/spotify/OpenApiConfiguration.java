@@ -1,3 +1,5 @@
+package br.com.ibmec.cloud.spotify;
+
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -10,11 +12,11 @@ public class OpenApiConfiguration {
     public OpenAPI apiDocConfig() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Ibmec Cloud 24.1")
-                        .description("SpotifyII cloud project")
+                        .title("Ibmec Cloud 2024.1")
+                        .description("Spotify II Cloud Project")
                         .version("1.0")
                         .contact(new Contact()
-                                .email("vitor@email.com")
+                                .email("lobivitor1@gmail.com")
                                 .name("Vitor Lobianco")
                         )
                 );

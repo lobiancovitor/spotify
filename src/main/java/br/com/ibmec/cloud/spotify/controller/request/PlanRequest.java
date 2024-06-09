@@ -11,5 +11,6 @@ public class PlanRequest {
     private UUID id;
     private String name;
     private double price;
+    private Boolean active;
     private List<Subscription> subscriptions;
 }

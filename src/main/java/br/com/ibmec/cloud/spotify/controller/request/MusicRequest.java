@@ -1,5 +1,6 @@
 package br.com.ibmec.cloud.spotify.controller.request;
 
+import br.com.ibmec.cloud.spotify.models.Band;
 import lombok.Data;
 
 import java.util.UUID;
@@ -8,6 +9,6 @@ import java.util.UUID;
 public class MusicRequest {
     private UUID id;
     private String name;
-    private String description;
     private Integer duration;
+    private Band band;
 }

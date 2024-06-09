@@ -10,6 +10,14 @@ import java.util.UUID;
 @Entity
 public class Plan {
 
+    public Plan() {
+    }
+
+    public Plan(String name, Double price) {
+        this.name = name;
+        this.price = price;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -18,7 +26,10 @@ public class Plan {
     private String name;
 
     @Column
-    private double price;
+    private Double price;
+
+    @Column
+    private Boolean active;
 
     @OneToMany
     @JoinColumn(name = "plan_id", referencedColumnName = "id")

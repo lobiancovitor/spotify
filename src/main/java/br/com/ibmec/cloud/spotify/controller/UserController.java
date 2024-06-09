@@ -2,24 +2,20 @@ package br.com.ibmec.cloud.spotify.controller;
 
 import br.com.ibmec.cloud.spotify.controller.request.LoginRequest;
 import br.com.ibmec.cloud.spotify.controller.request.PlaylistRequest;
-import br.com.ibmec.cloud.spotify.models.Band;
-import br.com.ibmec.cloud.spotify.models.Music;
-import br.com.ibmec.cloud.spotify.models.Playlist;
-import br.com.ibmec.cloud.spotify.models.User;
-import br.com.ibmec.cloud.spotify.repository.MusicRepository;
-import br.com.ibmec.cloud.spotify.repository.PlaylistRepository;
-import br.com.ibmec.cloud.spotify.repository.UserRepository;
+import br.com.ibmec.cloud.spotify.models.*;
+import br.com.ibmec.cloud.spotify.repository.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
@@ -30,23 +26,41 @@ public class UserController {
     @Autowired
     private MusicRepository musicRepository;
 
+    @Autowired
+    private PlanRepository planRepository;
+
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
+
     @PostMapping
     public ResponseEntity<User> create(@Valid @RequestBody User user) {
 
-        if (!this.userRepository.findUserByEmail(user.getEmail()).isEmpty()) {
+        if (this.userRepository.findUserByEmail(user.getEmail()).isPresent()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        Plan plan = planRepository.findPlanByName("Free").orElseGet(() -> {
+            Plan newPlan = new Plan("Free", 0.0);
+            planRepository.save(newPlan);
+            return  newPlan;
+        });
+
+        final String DEFAULT_PLAYLIST = "Musicas favoritas";
+
         Playlist playlist = new Playlist();
         playlist.setId(UUID.randomUUID());
-        String DEFAULT_PLAYLIST = "Musicas favoritas";
         playlist.setName(DEFAULT_PLAYLIST);
         playlist.setUser(user);
 
-        user.getPlaylist().add(playlist);
+        Subscription subscription = new Subscription();
+
+        subscription.setUser(user);
+        subscription.setActive(true);
+        subscription.setPlan(plan);
 
         this.userRepository.save(user);
         this.playlistRepository.save(playlist);
+        this.subscriptionRepository.save(subscription);
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
@@ -56,6 +70,15 @@ public class UserController {
         return this.userRepository.findById(id).map(user -> {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<User>> getAll() {
+        List<User> users = this.userRepository.findAll();
+        if (users.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -199,5 +222,78 @@ public class UserController {
         playlistRepository.save(playlist);
 
         return new ResponseEntity(optionalUser.get(), HttpStatus.OK);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") UUID id, @RequestBody User newUser) {
+        Optional<User> optionalUser = this.userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        User user = optionalUser.get();
+
+        user.setName(newUser.getName());
+        user.setEmail(newUser.getEmail());
+        user.setPassword(newUser.getPassword());
+
+        userRepository.save(user);
+
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity removeUser(@PathVariable UUID id) {
+        Optional<User> optionalUser = this.userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        User user = optionalUser.get();
+
+        userRepository.delete(user);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping("{id}/subscriptions/{planId}")
+    public ResponseEntity addSubscription(@PathVariable UUID id, @PathVariable Plan plan) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        Optional<Plan> optionalPlan = planRepository.findById(plan.getId());
+
+        if (optionalUser.isEmpty()) {
+            return  new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        if (optionalPlan.isEmpty()) {
+            return  new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        User user = optionalUser.get();
+        Plan plan1 = optionalPlan.get();
+
+        if (!user.getSubscriptions().isEmpty()) {
+            user.getSubscriptions().forEach(item -> {
+                if (item.isActive()) {
+                    item.setActive(false);
+                }
+            });
+        }
+
+        Subscription subscription = new Subscription();
+
+        subscription.setActive(true);
+        subscription.setPlan(plan1);
+        subscription.setUser(user);
+
+        user.getSubscriptions().add(subscription);
+
+        subscriptionRepository.saveAndFlush(subscription);
+
+        userRepository.save(user);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

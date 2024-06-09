@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/band")
+@RequestMapping("/bands")
 public class BandController {
     @Autowired
     private BandRepository bandRepository;
@@ -30,6 +30,7 @@ public class BandController {
 
         Band band = new Band();
         band.setName(request.getName());
+        band.setImage(request.getImage());
 
         this.bandRepository.save(band);
 
@@ -39,6 +40,7 @@ public class BandController {
             music.setName(item.getName());
             music.setDuration(item.getDuration());
             music.setBand(band);
+
 
             band.getMusics().add(music);
 
