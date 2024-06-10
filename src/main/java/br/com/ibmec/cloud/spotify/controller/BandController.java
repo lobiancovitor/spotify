@@ -46,8 +46,7 @@ public class BandController {
             music.setDescription(item.getDescription());
             music.setBand(band);
 
-            String imageUrl = this.accountService.uploadFileToAzure(item.getImagemBase64());
-
+            String imageUrl = this.accountService.uploadFileToAzure(item.getImageBase64());
             music.setImage(imageUrl);
 
             band.getMusics().add(music);
@@ -75,7 +74,7 @@ public class BandController {
     }
 
     @PostMapping("{id}/music")
-    public ResponseEntity<Band> associateMusic(@PathVariable("id") UUID id, @Valid @RequestBody MusicRequest request) {
+    public ResponseEntity<Band> associateMusic(@PathVariable("id") UUID id, @Valid @RequestBody MusicRequest request) throws Exception {
         Optional<Band> optionalBand = this.bandRepository.findById(id);
 
         if (optionalBand.isEmpty()) {
@@ -87,8 +86,11 @@ public class BandController {
         Music music = new Music();
         music.setName(request.getName());
         music.setDescription(request.getDescription());
-        music.setImage(request.getImage());
         music.setBand(band);
+
+        String imageUrl = this.accountService.uploadFileToAzure(request.getImageBase64());
+        music.setImage(imageUrl);
+
         band.getMusics().add(music);
 
         this.musicRepository.save(music);
@@ -101,13 +103,5 @@ public class BandController {
         return this.bandRepository.findById(id).map(item -> {
             return new ResponseEntity<>(item.getMusics(), HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @PostMapping("uploadImage")
-    public ResponseEntity uploadToAzure(@RequestParam("file") MultipartFile file) throws IOException {
-
-        this.accountService.uploadFileToAzure(file);
-        return new ResponseEntity(HttpStatus.OK);
-
     }
 }
