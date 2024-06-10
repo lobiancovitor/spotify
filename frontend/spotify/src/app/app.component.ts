@@ -1,15 +1,27 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { MusicModalComponent } from './shared/music-modal/music-modal.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, HomeComponent],
+  imports: [RouterOutlet, CommonModule, HomeComponent, MusicModalComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
-  title = 'spotify';
+export class AppComponent implements OnInit {
+  user:any = undefined;
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    if (sessionStorage["user_autenticated"])
+      this.user = JSON.parse(sessionStorage["user_autenticated"]);
+  }
+
+  public favoritos() {
+      this.router.navigate(["favoritos"]);
+  }
 }

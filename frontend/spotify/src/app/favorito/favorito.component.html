@@ -1,17 +1,15 @@
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-2">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         <div class="col">
-          <app-filter (filterAction)="onFilter($event);"></app-filter>
-          <app-music-modal style="margin-left: 10px;" (onCreated)="reload();"></app-music-modal>
-          <br />
-          <app-search style="margin-left: 10px;" (onSelectedItem)="filterMusic($event);" (onClearedItem)="reload();" ></app-search>
+          <h3>Minhas Musicas Favoritos</h3>
         </div>
       </div>
     </div>
   </div>
-  
-  <div class="album py-5 bg-body-tertiary">
+
+
+<div class="album py-5 bg-body-tertiary">
     <div class="container">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         @for (item of musica; track $index) {

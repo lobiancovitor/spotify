@@ -1,0 +1,12 @@
+<div class="btn-group">
+    <button type="button" class="btn btn-primary">Bandas</button>
+    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+      <span class="visually-hidden">Bandas</span>
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="#" (click)="filter('ALL');">Ver todas as musicas</a></li>
+        @for (item of banda; track $index) {
+            <li><a class="dropdown-item" href="#" (click)="filter(item.id);">{{item.nome}}</a></li>
+        }
+    </ul>
+  </div>
