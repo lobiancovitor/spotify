@@ -6,12 +6,15 @@ import br.com.ibmec.cloud.spotify.models.Band;
 import br.com.ibmec.cloud.spotify.models.Music;
 import br.com.ibmec.cloud.spotify.repository.BandRepository;
 import br.com.ibmec.cloud.spotify.repository.MusicRepository;
+import br.com.ibmec.cloud.spotify.service.AzureStorageAccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,12 +28,14 @@ public class BandController {
     @Autowired
     private MusicRepository musicRepository;
 
+    @Autowired
+    private AzureStorageAccountService accountService;
+
     @PostMapping
-    public ResponseEntity<Band> create(@Valid @RequestBody BandRequest request) {
+    public ResponseEntity<Band> create(@Valid @RequestBody BandRequest request) throws Exception {
 
         Band band = new Band();
         band.setName(request.getName());
-        band.setImage(request.getImage());
 
         this.bandRepository.save(band);
 
@@ -38,9 +43,12 @@ public class BandController {
             Music music = new Music();
             music.setId(UUID.randomUUID());
             music.setName(item.getName());
-            music.setDuration(item.getDuration());
+            music.setDescription(item.getDescription());
             music.setBand(band);
 
+            String imageUrl = this.accountService.uploadFileToAzure(item.getImagemBase64());
+
+            music.setImage(imageUrl);
 
             band.getMusics().add(music);
 
@@ -78,7 +86,8 @@ public class BandController {
 
         Music music = new Music();
         music.setName(request.getName());
-        music.setDuration(request.getDuration());
+        music.setDescription(request.getDescription());
+        music.setImage(request.getImage());
         music.setBand(band);
         band.getMusics().add(music);
 
@@ -92,5 +101,13 @@ public class BandController {
         return this.bandRepository.findById(id).map(item -> {
             return new ResponseEntity<>(item.getMusics(), HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping("uploadImage")
+    public ResponseEntity uploadToAzure(@RequestParam("file") MultipartFile file) throws IOException {
+
+        this.accountService.uploadFileToAzure(file);
+        return new ResponseEntity(HttpStatus.OK);
+
     }
 }

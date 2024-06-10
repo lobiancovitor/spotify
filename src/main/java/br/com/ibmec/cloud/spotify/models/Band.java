@@ -22,9 +22,6 @@ public class Band {
     @Column
     private String name;
 
-    @Column
-    private String image;
-
     @OneToMany
     @JoinColumn(name = "band_id", referencedColumnName = "id")
     private List<Music> musics;

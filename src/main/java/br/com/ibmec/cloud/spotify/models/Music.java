@@ -18,7 +18,10 @@ public class Music {
     private String name;
 
     @Column
-    private Integer duration;
+    private String description;
+
+    @Column
+    private String image;
 
     @ManyToOne
     @JsonIgnore

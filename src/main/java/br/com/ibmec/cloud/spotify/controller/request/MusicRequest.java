@@ -9,6 +9,7 @@ import java.util.UUID;
 public class MusicRequest {
     private UUID id;
     private String name;
-    private Integer duration;
+    private String description;
+    private String image;
     private Band band;
 }
