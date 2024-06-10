@@ -18,26 +18,26 @@ export class UsuarioService {
       email: email,
       senha: senha
     };
-    // let options = {
-    //   headers: environment.headers
-    // };
+    let options = {
+      headers: environment.headers
+    };
 
-    return this.http.post<Usuario>(`${this.url}/login`, body); // (`${this.url}/login`, body, options)
+    return this.http.post<Usuario>(`${this.url}/login`, body, options);
   }
 
   public favoritar(id:String, idMusic: String) {
     let body = {  
     };
-    // let options = {
-    //   headers: environment.headers
-    // };
-    return this.http.post(`${this.url}/${id}/favoritar/${idMusic}`,body); // (`${this.url}/${id}/favoritar/${idMusic}`,body, options)
+    let options = {
+      headers: environment.headers
+    };
+    return this.http.post(`${this.url}/${id}/favoritar/${idMusic}`,body, options);
   }
 
   public obter(id:String) :Observable<Usuario> {
-    // let options = {
-    //   headers: environment.headers
-    // };
-    return this.http.get<Usuario>(`${this.url}/${id}`) // (`${this.url}/${id}`, options)
+    let options = {
+      headers: environment.headers
+    };
+    return this.http.get<Usuario>(`${this.url}/${id}`, options);
   }
 }
