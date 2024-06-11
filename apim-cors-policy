@@ -1,29 +1,32 @@
 <policies>
     <inbound>
-        <base />
-        <set-backend-service id="apim-generated-policy" backend-id="WebApp_spotify-cloud-api" />
-        <cors allow-credentials="false">
+        <cors allow-credentials="true">
             <allowed-origins>
-                <origin>*</origin>
+                <origin>https://wonderful-flower-0c1a45c0f.5.azurestaticapps.net/</origin>
+                <origin>http://localhost:4200</origin>
             </allowed-origins>
-            <allowed-methods preflight-result-max-age="300">
-                <method>*</method>
+            <allowed-methods>
+                <method>GET</method>
+                <method>POST</method>
+                <method>PUT</method>
+                <method>DELETE</method>
+                <method>HEAD</method>
             </allowed-methods>
             <allowed-headers>
                 <header>*</header>
             </allowed-headers>
-            <expose-headers>
-                <header>*</header>
-            </expose-headers>
         </cors>
     </inbound>
     <backend>
-        <base />
+        <forward-request />
     </backend>
     <outbound>
-        <base />
+        <set-header name="Access-Control-Allow-Origin" exists-action="override">
+            <value>@(context.Request.Headers.GetValueOrDefault("Origin", ""))</value>
+        </set-header>
+        <set-header name="Access-Control-Allow-Credentials" exists-action="override">
+            <value>true</value>
+        </set-header>
     </outbound>
-    <on-error>
-        <base />
-    </on-error>
+    <on-error />
 </policies>
