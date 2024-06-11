@@ -13,7 +13,7 @@ import { BandaService } from '../../services/banda.service';
 })
 export class SearchComponent {
   data = [];
-  keyword = 'nome_carros';
+  keyword = 'nome_musicas';
   @Output() onSelectedItem = new EventEmitter<String>();
   @Output() onClearedItem = new EventEmitter();
   constructor(private bandaService: BandaService) {}
