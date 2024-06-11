@@ -6,6 +6,8 @@ import br.com.ibmec.cloud.spotify.models.Band;
 import br.com.ibmec.cloud.spotify.models.Music;
 import br.com.ibmec.cloud.spotify.repository.BandRepository;
 import br.com.ibmec.cloud.spotify.repository.MusicRepository;
+import br.com.ibmec.cloud.spotify.service.AzureSearchIndex;
+import br.com.ibmec.cloud.spotify.service.AzureSearchService;
 import br.com.ibmec.cloud.spotify.service.AzureStorageAccountService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class BandController {
     @Autowired
     private AzureStorageAccountService accountService;
 
+    @Autowired
+    private AzureSearchService searchService;
+
     @PostMapping
     public ResponseEntity<Band> create(@Valid @RequestBody BandRequest request) throws Exception {
 
@@ -52,6 +57,8 @@ public class BandController {
             band.getMusics().add(music);
 
             this.musicRepository.save(music);
+
+            this.searchService.index(music.getId(), band.getName(), music.getName());
         }
 
         return new ResponseEntity<>(band, HttpStatus.CREATED);
@@ -95,6 +102,8 @@ public class BandController {
 
         this.musicRepository.save(music);
 
+        this.searchService.index(music.getId(), band.getName(), music.getName());
+
         return new ResponseEntity<>(band, HttpStatus.CREATED);
     }
 
@@ -103,5 +112,10 @@ public class BandController {
         return this.bandRepository.findById(id).map(item -> {
             return new ResponseEntity<>(item.getMusics(), HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/autocomplete")
+    public ResponseEntity<List<AzureSearchIndex>> autocomplete(@RequestParam String search) {
+        return  new ResponseEntity<>(this.searchService.suggester(search), HttpStatus.OK);
     }
 }
