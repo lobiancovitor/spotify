@@ -49,10 +49,11 @@ public class BandController {
             music.setId(UUID.randomUUID());
             music.setName(item.getName());
             music.setDescription(item.getDescription());
-            music.setBand(band);
 
             String imageUrl = this.accountService.uploadFileToAzure(item.getImageBase64());
             music.setImage(imageUrl);
+
+            music.setBand(band);
 
             band.getMusics().add(music);
 
@@ -116,6 +117,6 @@ public class BandController {
 
     @GetMapping("/autocomplete")
     public ResponseEntity<List<AzureSearchIndex>> autocomplete(@RequestParam String search) {
-        return  new ResponseEntity<>(this.searchService.suggester(search), HttpStatus.OK);
+        return new ResponseEntity<>(this.searchService.suggester(search), HttpStatus.OK);
     }
 }
