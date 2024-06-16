@@ -19,9 +19,8 @@ export class FavoritoComponent implements OnInit {
     this.user = JSON.parse(sessionStorage["user_autenticated"]);
 
     this.userService.obter(this.user.id).subscribe(response => {
-      for (const lista of response.listaDesejo) {
-        this.musica.push(...(lista as any).musicas);
-        console.log(this.musica);
+      for (const lista of response.playlist) {
+        this.musica.push(...(lista as any).musics);
       }
     });
 
