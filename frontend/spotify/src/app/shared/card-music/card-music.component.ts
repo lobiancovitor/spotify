@@ -25,4 +25,14 @@ export class CardMusicComponent {
 
     }
 
+    public desfavoritar() {
+      var user = JSON.parse(sessionStorage["user_autenticated"]);
+
+      this.userService.desfavoritar(user.id, this.music?.id as String)
+      .subscribe(() => {
+        console.log("desfavoritado com sucesso");
+      });
+
+    }
+
 }
