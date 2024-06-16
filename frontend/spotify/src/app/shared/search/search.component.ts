@@ -21,6 +21,7 @@ export class SearchComponent {
   onChangeSearch(text: string) {
     this.bandaService.autocomplete(text).pipe(take(1)).toPromise().then(response => {
       this.data = response;
+      console.log(this.data);
     });
 
   }
