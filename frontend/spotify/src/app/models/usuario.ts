@@ -5,5 +5,5 @@ export interface Usuario {
     nome:String;
     email:String;
     senha:String;
-    listaDesejo: Array<lista>;
+    playlist: Array<lista>;
 }
