@@ -6,7 +6,7 @@
     <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="#" (click)="filter('ALL');">Ver todas as musicas</a></li>
         @for (item of banda; track $index) {
-            <li><a class="dropdown-item" href="#" (click)="filter(item.id);">{{item.nome}}</a></li>
+            <li><a class="dropdown-item" href="#" (click)="filter(item.id);">{{item.name}}</a></li>
         }
     </ul>
   </div>
