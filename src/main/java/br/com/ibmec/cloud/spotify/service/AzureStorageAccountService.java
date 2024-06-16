@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Service
 public class AzureStorageAccountService {
-    private final String connectionString = "DefaultEndpointsProtocol=https;AccountName=lobivitorstorage;AccountKey=v1hj61RI7ROmR7gv4ED1jmUX+3N1lYCKg2ZiyHH+3W4QeRygGcFs71iCYgY/dRR+VI03cQFMmCnV+AStWAmvbQ==;EndpointSuffix=core.windows.net";
+    private String connectionString = "DefaultEndpointsProtocol=https;AccountName=lobivitorstorage;AccountKey=v1hj61RI7ROmR7gv4ED1jmUX+3N1lYCKg2ZiyHH+3W4QeRygGcFs71iCYgY/dRR+VI03cQFMmCnV+AStWAmvbQ==;EndpointSuffix=core.windows.net";
     public String uploadFileToAzure(String imageBase64) throws IOException {
         BlobContainerClient client = new BlobContainerClientBuilder()
                 .connectionString(this.connectionString)
@@ -28,7 +28,7 @@ public class AzureStorageAccountService {
 
         blob.upload(binDataImage, true);
 
-        return "https://lobivitorstorage.blob.core.windows.net/images" + fileName;
+        return "https://lobivitorstorage.blob.core.windows.net/images/" + fileName;
 
     }
 }
