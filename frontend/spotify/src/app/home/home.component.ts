@@ -38,6 +38,7 @@ export class HomeComponent implements OnInit {
   public onFilter($event: any) {
     let id = $event;
     this.musica = [];
+    console.log(this.musica)
     if (id !== 'ALL') {
       this.bandaService.obterMusicaBanda(id).pipe(take(1)).subscribe(response => {
         this.musica = response;
@@ -45,7 +46,7 @@ export class HomeComponent implements OnInit {
     } else {
       this.bandaService.obterBandas().pipe(take(1)).subscribe(bandas => {
         for (const item of bandas) {
-          this.musica.push(...item.musicas);
+          this.musica.push(...item.musics);
         }
       });
     }
