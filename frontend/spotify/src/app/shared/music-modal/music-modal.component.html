@@ -45,7 +45,7 @@
                                 <select class="form-select" name="banda" [formControl]="banda">
                                     <option selected value="">Selecione a banda</option>
                                     @for (item of itensBanda; track $index) {
-                                    <option [value]="item.id">{{item.nome}}</option>
+                                    <option [value]="item.id">{{item.name}}</option>
                                     }
                                 </select>
                                 @if (this.banda.dirty && (this.banda.invalid &&
