@@ -34,9 +34,9 @@ export class MusicModalComponent implements OnInit {
       let idBanda = this.banda.value;
       let base64Img = reader.result?.toString().replace(/^data:image\/?[A-z]*;base64,/, "");
       let request = {
-        nome: this.nome.value,
-        descricao: this.descricao.value,
-        imagemBase64: base64Img
+        name: this.nome.value,
+        description: this.descricao.value,
+        imageBase64: base64Img
       }
 
       this.bandaService.criarMusica(request, idBanda as String).subscribe(response => {
