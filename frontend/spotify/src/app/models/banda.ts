@@ -1,7 +1,7 @@
 import { Musica } from "./musica";
 
 export interface Banda {
-    id:String,
+    id:String;
     name:String;
-    musics:Array<Musica>
+    musics:Array<Musica>;
 }
