@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Banda } from '../models/banda';
 import { CommonModule } from '@angular/common';
 import { BandaService } from '../services/banda.service';
 import { FilterComponent } from '../shared/filter/filter.component';
@@ -17,7 +16,7 @@ import { SearchComponent } from '../shared/search/search.component';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  musica = new Array<Musica>;
+  musica = new Array<Musica>();
 
   constructor(private bandaService: BandaService) { }
 
@@ -27,24 +26,25 @@ export class HomeComponent implements OnInit {
 
   public reload() {
     this.onFilter('ALL');
- }
+  }
 
- public filterMusic($event:any) {
-  let result = this.musica.filter(x => x.id == $event);
-  this.musica = [];
-  this.musica = result;
-}
+  public filterMusic($event: any) {
+    let result = this.musica.filter(x => x.id == $event);
+    this.musica = [];
+    this.musica = result;
+  }
 
   public onFilter($event: any) {
     let id = $event;
     this.musica = [];
-    console.log(this.musica)
     if (id !== 'ALL') {
       this.bandaService.obterMusicaBanda(id).pipe(take(1)).subscribe(response => {
+        console.log('Received response:', response);
         this.musica = response;
       });
     } else {
       this.bandaService.obterBandas().pipe(take(1)).subscribe(bandas => {
+        console.log('Received bands:', bandas);
         for (const item of bandas) {
           this.musica.push(...item.musics);
         }
