@@ -18,16 +18,16 @@ public class AzureSearchService {
 
     private String indexName = "musicas";
 
-    public void index(UUID id, String nomeMusica, String banda) {
+    public void index(UUID id, String banda, String nomeMusica) {
 
         //Cria o objeto para subir para o indice
         IndexDocumentsBatch<AzureSearchIndex> batch = new IndexDocumentsBatch<>();
         AzureSearchIndex index = new AzureSearchIndex();
 
-        //configura o objeto para os valores od indice
+        //configura o objeto para os valores do indice
         index.setId(id.toString());
-        index.setNomeMusica(nomeMusica);
         index.setBanda(banda);
+        index.setNomeMusica(nomeMusica);
 
         batch.addUploadActions(Collections.singletonList(index));
 
